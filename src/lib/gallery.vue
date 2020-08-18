@@ -42,6 +42,10 @@ export default {
             type: Number,
             default: 300
         },
+        width: { // 容器宽度
+            type: Number,
+            default: 800
+        },
         autoplay: { // 自动轮播
             type: Boolean,
             default: false
@@ -73,13 +77,14 @@ export default {
     },
     data() {
         return {
+            timer: null,
             active: 0, // 当前居中
             back: false // 正反面
         }
     },
     computed: {
         range() {
-            var range = {
+            let range = {
                 left: {
                     x: [],
                     y: []
@@ -89,15 +94,13 @@ export default {
                     y: []
                 }
             }
-            let $wrap = this.$refs.wrap
-            let $photo = this.$refs.photo
             var wrap = {
-                w: $wrap.clientWidth,
-                h: $wrap.clientHeight
+                w: this.width,
+                h: this.height
             }
             var photo = {
-                w: $photo[0].clientWidth,
-                h: $photo[0].clientHeight
+                w: this.imgWidth,
+                h: this.imgHeight
             }
             range.wrap = wrap // 向json里面添加json元素.
             range.photo = photo
@@ -111,25 +114,39 @@ export default {
                 wrap.w - photo.w / 2
             ] // 定义json数组中的元素 , 用.方法.
             range.right.y = [0 - photo.h / 2, wrap.h - photo.w / 2]
-            console.log(range)
             return range
         }
     },
-    created() {
-        const that = this
-        this.$nextTick(() => {
-            this.sort(this.initIndex)
+    watch: {
+        list() {
+            this.init()
+        }
+    },
+    beforeDestroy() {
+        this.timer && clearInterval(this.timer)
+    },
+    mounted() {
+        this.init()
+    },
+    methods: {
+        init() {
+            this.$nextTick(() => {
+                this.sort(this.initIndex)
+                this.play()
+            })
+        },
+        play() {
+            const that = this
             if (this.autoplay) {
-                let i = this.initIndex
-                setInterval(() => {
+                this.timer && clearInterval(this.timer)
+                this.timer = setInterval(() => {
+                    let i = this.active
                     i++
                     if (i >= that.list.length) i = 0
                     that.sort(i)
                 }, this.delay || 3000)
             }
-        })
-    },
-    methods: {
+        },
         random(range) {
             var min = Math.min(range[0], range[1])
             var max = Math.max(range[0], range[1])
@@ -281,7 +298,7 @@ body {
     height: 30px;
     position: absolute;
     left: 10%;
-    bottom: 30px;
+    bottom: 10px;
     text-align: center;
     z-index: 1000;
 }

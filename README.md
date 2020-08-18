@@ -33,6 +33,7 @@ Parameter | Type | Default | Required | Description
 --------- | ---- | ---- | ---- |-----------
 list | `array` | `[]` | true | The images list
 height | `number`| `300` | false | The container height
+width | `number`| `800` | false | The container width
 imgWidth | `number` | `120` | false | The image width
 imgHeight | `number` | `160` | false | The image height
 autoplay | `boolean` | `false` | false | Whether to auto play
@@ -66,7 +67,7 @@ isBack | `boolean` | `false` | false | Is back description
                     },
                     { 
                         src: 'http://xxx.com/2.png',
-                        title: '2,
+                        title: '2', // 
                         desc: 'The page 2'
                     },
                     { 

@@ -10,7 +10,12 @@ export default {
     name: 'App',
     data() {
 	  return {
-            list: [
+            list: []
+	  }
+    },
+    created() {
+        setTimeout(() => {
+            this.list = [
                 {
                     src: require('./assets/1.jpg')
                 },
@@ -64,7 +69,7 @@ export default {
                     desc: `123456`
                 }
             ]
-	  }
+        }, 2000)
     }
 }
 </script>
